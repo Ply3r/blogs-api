@@ -10,11 +10,23 @@ const create = async (req, res, next) => {
   }
 };
 
-const findAll = async (req, res, next) => {
+const findAll = async (_req, res, next) => {
   try {
     const user = await userService.findAll();
 
     return res.status(200).json(user);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const destroy = async (req, res, next) => {
+  try {
+    const { dataValues: { id } } = req.user;
+
+    await userService.destroy(+id);
+
+    return res.status(204).end();
   } catch (err) {
     next(err);
   }
@@ -42,4 +54,4 @@ const login = async (req, res, next) => {
   }
 };
 
-module.exports = { create, findAll, findOne, login };
+module.exports = { create, findAll, destroy, findOne, login };

@@ -19,6 +19,13 @@ router
   );
 
 router
+  .route('/user/me')
+  .delete(
+    auth,
+    user.destroy,
+  );
+
+router
   .route('/user/:id')
   .get(
     auth,

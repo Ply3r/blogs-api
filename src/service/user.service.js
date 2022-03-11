@@ -42,6 +42,10 @@ const findOne = async (id) => {
   return user;
 };
 
+const destroy = async (id) => {
+  await User.destroy({ where: { id } });
+};
+
 const login = async ({ email, password }) => {
   const user = await User.findOne({ where: { email, password } });
 
@@ -53,4 +57,4 @@ const login = async ({ email, password }) => {
   return { token };
 };
 
-module.exports = { create, findAll, findOne, login };
+module.exports = { create, findAll, destroy, findOne, login };
