@@ -9,6 +9,10 @@ const router = express.Router();
 
 router
   .route('/post')
+  .get(
+    auth,
+    post.findAll,
+  )
   .post(
     auth,
     validate(postSchema.create),

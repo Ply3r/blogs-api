@@ -1,4 +1,4 @@
-const { BlogPost, PostsCategory, Category } = require('../models');
+const { User, BlogPost, PostsCategory, Category } = require('../models');
 const ValidateError = require('../utils/ValidateError.js');
 
 const create = async ({ title, content, categoryIds, userId }) => {
@@ -19,4 +19,24 @@ const create = async ({ title, content, categoryIds, userId }) => {
   return { id: postId, userId, title, content };
 };
 
-module.exports = { create };
+const findAll = async () => {
+  const posts = await BlogPost.findAll({
+    include: [
+      { 
+        model: User, 
+        foreignKey: 'userId',
+        attributes: { exclude: ['password'] },
+        as: 'user',
+      },
+      { 
+        model: Category, 
+        foreignKey: 'categoryId',
+        as: 'categories',
+      },
+    ],
+  });
+
+  return posts;
+};
+
+module.exports = { create, findAll };
