@@ -9,6 +9,10 @@ const router = express.Router();
 
 router
   .route('/categories')
+  .get(
+    auth,
+    category.findAll,
+  )
   .post(
     auth,
     validate(categorySchema.create),
