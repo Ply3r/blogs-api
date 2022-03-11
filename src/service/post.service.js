@@ -62,4 +62,25 @@ const findOne = async (id) => {
   return post;
 };
 
-module.exports = { create, findOne, findAll };
+const update = async ({ id, userId, ...data }) => {
+  if (id !== userId) throw new ValidateError({ status: 401, message: 'Unauthorized user' });
+  
+  const post = await BlogPost.findOne({
+    include: [
+      { 
+        model: Category, 
+        foreignKey: 'categoryId',
+        as: 'categories',
+      },
+    ],
+    where: { id },
+  });
+  
+  if (!post) throw new ValidateError({ status: 404, message: 'Post does not exist' });
+  
+  await BlogPost.update(data, { where: { id } });
+
+  return { ...post.dataValues, ...data };
+};
+
+module.exports = { create, update, findOne, findAll };

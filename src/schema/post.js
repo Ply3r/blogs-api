@@ -18,4 +18,20 @@ const create = Joi.object({
   }),
 });
 
-module.exports = { create };
+const update = Joi.object({
+  title: Joi.string().required()
+    .messages({
+      'any.required': '400|"title" is required',
+      'string.empty': '400|"title" is not allowed to be empty"',
+      'string.base': '400|"title" is a string',
+    }),
+  content: Joi.string().required()
+    .messages({
+      'any.required': '400|"content" is required',
+      'string.base': '400|"content" is a string',
+      'string.empty': '400|"content" is not allowed to be empty"',
+    }),
+  categoryIds: Joi.any().forbidden().error((_err) => new Error('400|Categories cannot be edited')),
+});
+
+module.exports = { create, update };

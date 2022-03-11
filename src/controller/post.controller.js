@@ -34,4 +34,18 @@ const findOne = async (req, res, next) => {
   }
 };
 
-module.exports = { create, findAll, findOne };
+const update = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { id: userId } = req.user;
+    const data = req.body;
+
+    const post = await postService.update({ id: +id, userId, ...data });
+
+    return res.status(200).json(post);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { create, update, findAll, findOne };

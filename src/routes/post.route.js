@@ -24,6 +24,11 @@ router
   .get(
     auth,
     post.findOne,
+  )
+  .put(
+    auth,
+    validate(postSchema.update),
+    post.update,
   );
 
 module.exports = router;
