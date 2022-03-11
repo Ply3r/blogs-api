@@ -1,5 +1,3 @@
-const { fn } = require('sequelize');
-
 const associate = (models) => {
   models.BlogPost.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
 };
@@ -12,11 +10,11 @@ module.exports = (sequelize, DataTypes) => {
     userId: DataTypes.INTEGER,
     published: {
       type: DataTypes.DATE,
-      defaultValue: fn('NOW'),
+      defaultValue: sequelize.fn('NOW'),
     },
     updated: {
       type: DataTypes.DATE,
-      defaultValue: fn('NOW'),
+      defaultValue: sequelize.fn('NOW'),
     },
   }, {
     timestamps: false,
