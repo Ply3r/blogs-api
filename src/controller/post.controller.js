@@ -23,6 +23,17 @@ const findAll = async (_req, res, next) => {
   }
 };
 
+const findBySearch = async (req, res, next) => {
+  try {
+    const { q: query } = req.query;
+    const posts = await postService.findBySearch(query);
+
+    return res.status(200).json(posts);
+  } catch (err) {
+    next(err);
+  }
+};
+
 const findOne = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -61,4 +72,4 @@ const destroy = async (req, res, next) => {
   }
 };
 
-module.exports = { create, update, destroy, findAll, findOne };
+module.exports = { create, update, destroy, findAll, findOne, findBySearch };

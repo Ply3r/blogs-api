@@ -20,6 +20,13 @@ router
   );
 
 router
+  .route('/post/search')
+  .get(
+    auth,
+    post.findBySearch,
+  );
+
+router
   .route('/post/:id')
   .get(
     auth,
