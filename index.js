@@ -13,6 +13,6 @@ app.get('/', (request, response) => {
   response.send();
 });
 
-app.use('/user', user);
+app.use(user);
 
 app.use(error);

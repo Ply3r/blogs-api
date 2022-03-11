@@ -23,4 +23,15 @@ const create = async (data) => {
   return { token };
 };
 
-module.exports = { create };
+const login = async ({ email, password }) => {
+  const user = await User.findOne({ where: { email, password } });
+
+  if (!user) {
+    throw new ValidateError({ status: 400, message: 'Invalid fields' });
+  }
+
+  const token = jwt.sign({ email, password }, secret, jwtConfig);
+  return { token };
+};
+
+module.exports = { create, login };

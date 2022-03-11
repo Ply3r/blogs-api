@@ -7,10 +7,17 @@ const userSchema = require('../schema/user.js');
 const router = express.Router();
 
 router
-  .route('/')
+  .route('/user')
   .post(
-    validate(userSchema),
+    validate(userSchema.create),
     user.create,
+  );
+
+router
+  .route('/login')
+  .post(
+    validate(userSchema.login),
+    user.login,
   );
 
 module.exports = router;
