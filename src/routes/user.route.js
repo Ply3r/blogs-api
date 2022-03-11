@@ -19,6 +19,13 @@ router
   );
 
 router
+  .route('/user/:id')
+  .get(
+    auth,
+    user.findOne,
+  );
+
+router
   .route('/login')
   .post(
     validate(userSchema.login),

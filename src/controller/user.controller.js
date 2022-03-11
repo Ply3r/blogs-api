@@ -20,6 +20,18 @@ const findAll = async (req, res, next) => {
   }
 };
 
+const findOne = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const user = await userService.findOne(+id);
+
+    return res.status(200).json(user);
+  } catch (err) {
+    next(err);
+  }
+};
+
 const login = async (req, res, next) => {
   try {
     const token = await userService.login(req.body);
@@ -30,4 +42,4 @@ const login = async (req, res, next) => {
   }
 };
 
-module.exports = { create, findAll, login };
+module.exports = { create, findAll, findOne, login };

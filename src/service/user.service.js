@@ -29,6 +29,19 @@ const findAll = async () => {
   return users;
 };
 
+const findOne = async (id) => {
+  const user = await User.findOne({
+    where: { id },
+    attributes: { exclude: ['password'] },
+  });
+
+  if (!user) {
+    throw new ValidateError({ status: 404, message: 'User does not exist' });
+  }
+
+  return user;
+};
+
 const login = async ({ email, password }) => {
   const user = await User.findOne({ where: { email, password } });
 
@@ -40,4 +53,4 @@ const login = async ({ email, password }) => {
   return { token };
 };
 
-module.exports = { create, findAll, login };
+module.exports = { create, findAll, findOne, login };
