@@ -1,5 +1,6 @@
 const express = require('express');
 const user = require('./src/routes/user.route.js');
+const category = require('./src/routes/category.route.js');
 const error = require('./src/middleware/error.js');
 
 const app = express();
@@ -14,5 +15,6 @@ app.get('/', (request, response) => {
 });
 
 app.use(user);
+app.use(category);
 
 app.use(error);
