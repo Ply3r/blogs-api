@@ -13,7 +13,7 @@ const create = async (req, res, next) => {
   }
 };
 
-const findAll = async (req, res, next) => {
+const findAll = async (_req, res, next) => {
   try {
     const posts = await postService.findAll();
 
@@ -23,4 +23,15 @@ const findAll = async (req, res, next) => {
   }
 };
 
-module.exports = { create, findAll };
+const findOne = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const post = await postService.findOne(+id);
+
+    return res.status(200).json(post);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { create, findAll, findOne };

@@ -19,4 +19,11 @@ router
     post.create,
   );
 
+router
+  .route('/post/:id')
+  .get(
+    auth,
+    post.findOne,
+  );
+
 module.exports = router;

@@ -4,7 +4,7 @@ const ValidateError = require('../utils/ValidateError');
 
 const secret = process.env.JWT_SECRET;
 
-const auth = async (req, res, next) => {
+const auth = async (req, _res, next) => {
   try {
     const { authorization } = req.headers;
 

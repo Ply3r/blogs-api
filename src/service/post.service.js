@@ -39,4 +39,27 @@ const findAll = async () => {
   return posts;
 };
 
-module.exports = { create, findAll };
+const findOne = async (id) => {
+  const post = await BlogPost.findOne({
+    include: [
+      { 
+        model: User, 
+        foreignKey: 'userId',
+        attributes: { exclude: ['password'] },
+        as: 'user',
+      },
+      { 
+        model: Category, 
+        foreignKey: 'categoryId',
+        as: 'categories',
+      },
+    ],
+    where: { id },
+  });
+
+  if (!post) throw new ValidateError({ status: 404, message: 'Post does not exist' });
+
+  return post;
+};
+
+module.exports = { create, findOne, findAll };
