@@ -5,19 +5,30 @@ const ValidateError = require('../utils/ValidateError');
 const secret = process.env.JWT_SECRET;
 
 const auth = async (req, res, next) => {
-  const { authorization } = req.headers;
-  const { email, password } = jwt.verify(authorization, secret);
+  try {
+    const { authorization } = req.headers;
+  
+    if (!authorization) {
+      throw new ValidateError({ status: 401, message: 'Token not found' });
+    }
+    
+    const { email, password } = jwt.verify(authorization, secret);
+    const userExists = await User.findOne({ where: { email, password } });
 
-  if (!authorization) {
-    throw new ValidateError({ status: 401, message: 'Token not found' });
+    if (!userExists) {
+      throw new ValidateError({ status: 401, message: 'Expired or invalid token' });
+    }
+
+    next();
+  } catch (err) {
+    let error = err;
+
+    if (!err.status) {
+      error = new ValidateError({ status: 401, message: 'Expired or invalid token' });
+    }
+
+    next(error);
   }
-
-  const userExists = await User.findOne({ where: { email, password } });
-  if (!userExists) {
-    throw new ValidateError({ status: 401, message: 'Expired or invalid token' });
-  }
-
-  next();
 };
 
 module.exports = auth;

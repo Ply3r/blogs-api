@@ -10,6 +10,16 @@ const create = async (req, res, next) => {
   }
 };
 
+const findAll = async (req, res, next) => {
+  try {
+    const user = await userService.findAll();
+
+    return res.status(200).json(user);
+  } catch (err) {
+    next(err);
+  }
+};
+
 const login = async (req, res, next) => {
   try {
     const token = await userService.login(req.body);
@@ -20,4 +30,4 @@ const login = async (req, res, next) => {
   }
 };
 
-module.exports = { create, login };
+module.exports = { create, findAll, login };

@@ -23,6 +23,12 @@ const create = async (data) => {
   return { token };
 };
 
+const findAll = async () => {
+  const users = await User.findAll({ attributes: { exclude: ['password'] } });
+
+  return users;
+};
+
 const login = async ({ email, password }) => {
   const user = await User.findOne({ where: { email, password } });
 
@@ -34,4 +40,4 @@ const login = async ({ email, password }) => {
   return { token };
 };
 
-module.exports = { create, login };
+module.exports = { create, findAll, login };
