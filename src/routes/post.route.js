@@ -29,6 +29,10 @@ router
     auth,
     validate(postSchema.update),
     post.update,
+  )
+  .delete(
+    auth,
+    post.destroy,
   );
 
 module.exports = router;

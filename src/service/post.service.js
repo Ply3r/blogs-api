@@ -64,7 +64,7 @@ const findOne = async (id) => {
 
 const update = async ({ id, userId, ...data }) => {
   if (id !== userId) throw new ValidateError({ status: 401, message: 'Unauthorized user' });
-  
+
   const post = await BlogPost.findOne({
     include: [
       { 
@@ -83,4 +83,13 @@ const update = async ({ id, userId, ...data }) => {
   return { ...post.dataValues, ...data };
 };
 
-module.exports = { create, update, findOne, findAll };
+const destroy = async ({ id, userId }) => {
+  const post = await findOne(id);
+  
+  if (!post) throw new ValidateError({ status: 404, message: 'Post does not exist' });
+  if (id !== userId) throw new ValidateError({ status: 401, message: 'Unauthorized user' });
+  
+  await BlogPost.destroy({ where: { id } });
+};
+
+module.exports = { create, update, destroy, findOne, findAll };

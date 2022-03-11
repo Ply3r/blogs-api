@@ -48,4 +48,17 @@ const update = async (req, res, next) => {
   }
 };
 
-module.exports = { create, update, findAll, findOne };
+const destroy = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { id: userId } = req.user;
+
+    await postService.destroy({ id: +id, userId });
+
+    return res.status(204).end();
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { create, update, destroy, findAll, findOne };
