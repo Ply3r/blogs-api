@@ -1,12 +1,21 @@
+/* eslint-disable max-lines-per-function */
 const Sequelize = require('sequelize');
 const { User, BlogPost, PostsCategory, Category } = require('../models');
+const config = require('../config/config');
 const ValidateError = require('../utils/ValidateError.js');
 
 const { Op } = Sequelize;
 
+const sequelize = new Sequelize(config.development);
+
 const create = async ({ title, content, categoryIds, userId }) => {
+  const transaction = sequelize.transaction();
+
   try {
-    const { dataValues: { id: postId } } = await BlogPost.create({ title, content, userId });
+    const { dataValues: { id: postId } } = await BlogPost.create(
+      { title, content, userId }, 
+      { transaction },
+    );
 
     await Promise.all(
       categoryIds.map(async (categoryId) => {
@@ -16,12 +25,15 @@ const create = async ({ title, content, categoryIds, userId }) => {
           throw new ValidateError({ status: 400, message: '"categoryIds" not found' });
         }
         
-        await PostsCategory.create({ postId, categoryId });
+        await PostsCategory.create({ postId, categoryId }, { transaction });
       }),
     );
 
+    await transaction.commit();
+
     return { id: postId, userId, title, content };
   } catch (err) {
+    await transaction.rollback();
     throw new ValidateError({ status: err.status || 500, message: err.message });
   }
 };
