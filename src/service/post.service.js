@@ -81,11 +81,27 @@ const makeFindBySearchQuery = (query) => ({
   ],
   where: Sequelize.where(
     Sequelize.fn('concat', Sequelize.col('title'), ' ', Sequelize.col('content')),
-    { [Op.like]: `%${query || ''}%` },
+    { [Op.like]: `%${query}%` },
   ),
 });
 
 const findBySearch = async (query) => {
+  if (!query) {
+    const post = await BlogPost.findAll({
+      include: [{ 
+          model: User, 
+          foreignKey: 'userId',
+          attributes: { exclude: ['password'] },
+          as: 'user',
+        },
+        { 
+          model: Category, 
+          foreignKey: 'categoryId',
+          as: 'categories',
+        }],
+    }); return post;
+  }
+
   const post = await BlogPost.findAll(makeFindBySearchQuery(query));
 
   if (!post) throw new ValidateError({ status: 404, message: 'Post does not exist' });
